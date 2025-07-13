@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     Alert,
     Button,
@@ -15,6 +15,9 @@ import { useAuthSession } from "../services/AuthProvider";
 
 
 export default function LoginScreen() {
+    const renderCount = useRef(0);
+    renderCount.current++;
+    console.log(`Component rendered ${renderCount.current} times`);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,7 +44,7 @@ export default function LoginScreen() {
             }
             if (data.token) {
                 Alert.alert("Login Successfull")
-                signIn(data.token);
+                signIn(data.token, data.user.id);
             } else {
                 Alert.alert("Login failed", "No token received.");
             }
@@ -75,7 +78,7 @@ export default function LoginScreen() {
                         />
                         <Button
                             color='black'
-                            onPress={() => onLoginPress()}
+                            onPress={onLoginPress}
                             title={loading ? "Logging in..." : "Login"}
                             disabled={loading}
 

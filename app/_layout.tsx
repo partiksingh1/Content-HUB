@@ -1,27 +1,20 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Slot } from 'expo-router';
-import 'react-native-reanimated';
-
 import { useColorScheme } from '@/hooks/useColorScheme';
-import AuthProvider from './providers/AuthProvider';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Slot } from 'expo-router';
+import { useRef } from 'react';
+import 'react-native-reanimated';
+import AuthProvider from './services/AuthProvider';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
+  const renderCount = useRef(0);
+  renderCount.current++;
+  console.log(`app _layout layout Component rendered ${renderCount.current} times`);
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-     <AuthProvider>
-      <Slot/>
-     </AuthProvider>
+      <AuthProvider>
+        <Slot />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
